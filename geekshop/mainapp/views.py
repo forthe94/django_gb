@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from .models import ProductCategory, Product
 # Create your views here.
 
 from django.shortcuts import render
@@ -7,8 +7,10 @@ from django.shortcuts import render
 
 def main(request):
     socials = ['socail' + str(i) for i in range(4)]
-    print(socials)
+    products = Product.objects.all()[:4]
+
     content = {
+        'products': products,
         'socials': socials
     }
     return render(request, 'mainapp/index.html', context=content)
