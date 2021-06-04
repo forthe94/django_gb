@@ -18,12 +18,14 @@ from django.urls import path
 import mainapp.views as mainapp
 from django.conf import settings
 from django.conf.urls.static import static
+from django.conf.urls import include
 
 urlpatterns = [
     path('', mainapp.main, name='index'),
     path('products/', mainapp.products, name='products'),
     path('contact/', mainapp.contact, name='contact'),
     path('admin/', admin.site.urls),
+    path('auth/', include('authapp.urls', namespace='auth')),
 ]
 
 if settings.DEBUG:
