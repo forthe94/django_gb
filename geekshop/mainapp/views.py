@@ -18,15 +18,16 @@ def main(request):
 
 
 def products(request, pk=None):
-    print(pk)
     socials = ['social' + str(i) for i in range(4)]
 
     title = 'продукты'
     links_menu = ProductCategory.objects.all()
 
-    cart = []
+    total = 0
+    total_items = 0
     if request.user.is_authenticated:
         cart = Cart.objects.filter(user=request.user)
+        total, total_items = request.user.get_cart_total()
 
     if pk is not None:
         if pk == 0:
@@ -42,9 +43,9 @@ def products(request, pk=None):
             'category': category,
             'products': products,
             'socials': socials,
-            'cart':cart,
+            'total': total,
+            'total_items': total_items
         }
-        print(content)
         return render(request, 'mainapp/products_list.html', content)
 
     same_products = Product.objects.all()[3:5]
@@ -61,7 +62,6 @@ def products(request, pk=None):
 
 def contact(request):
     socials = ['social' + str(i) for i in range(4)]
-    print(socials)
     content = {
         'socials': socials
     }

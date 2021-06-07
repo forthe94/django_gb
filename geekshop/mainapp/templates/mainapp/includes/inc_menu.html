@@ -15,7 +15,8 @@
     <a href="#" class="search"></a>
     <a href="{% url 'cart:view' %}" class="cart">
         <span>
-            {% if cart %} {{ cart|length }} {% endif %}
+            Общая стоимость: {{ total }}
+            Всего товаров: {{ total_items }}
         </span>
     </a>
 </div>
