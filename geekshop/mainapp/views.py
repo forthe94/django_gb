@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import ProductCategory, Product
 # Create your views here.
-
+from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 
 
@@ -16,15 +16,41 @@ def main(request):
     return render(request, 'mainapp/index.html', context=content)
 
 
-def products(request):
-    products_links = ['все', 'дом', 'офис', 'модерн', 'классика']
+def products(request, pk=None):
+    print(pk)
     socials = ['social' + str(i) for i in range(4)]
-    print(socials)
+
+    title = 'продукты'
+    links_menu = ProductCategory.objects.all()
+
+    if pk is not None:
+        if pk == 0:
+            products = Product.objects.all().order_by('price')
+            category = {'name': 'все'}
+        else:
+            category = get_object_or_404(ProductCategory, pk=pk)
+            products = Product.objects.filter(category__pk=pk).order_by('price')
+
+        content = {
+            'title': title,
+            'links_menu': links_menu,
+            'category': category,
+            'products': products,
+            'socials': socials
+        }
+        print(content)
+        return render(request, 'mainapp/products_list.html', content)
+
+    same_products = Product.objects.all()[3:5]
+
     content = {
-        'products_links': products_links,
+        'title': title,
+        'links_menu': links_menu,
+        'same_products': same_products,
         'socials': socials
     }
-    return render(request, 'mainapp/products.html', context=content)
+
+    return render(request, 'mainapp/products.html', content)
 
 
 def contact(request):
