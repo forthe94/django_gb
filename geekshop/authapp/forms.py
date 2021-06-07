@@ -1,6 +1,7 @@
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import UserChangeForm
+from django import forms
 from .models import ShopUser
 
 

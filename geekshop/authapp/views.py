@@ -9,6 +9,7 @@ from django.urls import reverse
 from authapp.forms import ShopUserRegisterForm
 from authapp.forms import ShopUserEditForm
 
+
 def login(request):
     title = 'вход'
 
@@ -20,7 +21,7 @@ def login(request):
         user = auth.authenticate(username=username, password=password)
         if user and user.is_active:
             auth.login(request, user)
-            return HttpResponseRedirect(reverse('main'))
+            return HttpResponseRedirect(reverse('index'))
 
     content = {'title': title, 'login_form': login_form}
     return render(request, 'authapp/login.html', content)
@@ -28,15 +29,7 @@ def login(request):
 
 def logout(request):
     auth.logout(request)
-    return HttpResponseRedirect(reverse('main'))
-
-
-def register(request):
-    return HttpResponseRedirect(reverse('main'))
-
-
-def edit(request):
-    return HttpResponseRedirect(reverse('main'))
+    return HttpResponseRedirect(reverse('index'))
 
 
 def register(request):
@@ -55,6 +48,7 @@ def register(request):
 
     return render(request, 'authapp/register.html', content)
 
+
 def edit(request):
     title = 'редактирование'
 
@@ -69,3 +63,4 @@ def edit(request):
     content = {'title': title, 'edit_form': edit_form}
 
     return render(request, 'authapp/edit.html', content)
+
