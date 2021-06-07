@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import ProductCategory, Product
+from cartapp.models import Cart
 # Create your views here.
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
@@ -23,6 +24,10 @@ def products(request, pk=None):
     title = 'продукты'
     links_menu = ProductCategory.objects.all()
 
+    cart = []
+    if request.user.is_authenticated:
+        cart = Cart.objects.filter(user=request.user)
+
     if pk is not None:
         if pk == 0:
             products = Product.objects.all().order_by('price')
@@ -36,7 +41,8 @@ def products(request, pk=None):
             'links_menu': links_menu,
             'category': category,
             'products': products,
-            'socials': socials
+            'socials': socials,
+            'cart':cart,
         }
         print(content)
         return render(request, 'mainapp/products_list.html', content)

@@ -13,4 +13,9 @@
         <li><a href="{% url 'contact' %}">контакты</a></li>
     </ul>
     <a href="#" class="search"></a>
+    <a href="{% url 'cart:view' %}" class="cart">
+        <span>
+            {% if cart %} {{ cart|length }} {% endif %}
+        </span>
+    </a>
 </div>
