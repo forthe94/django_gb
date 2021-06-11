@@ -4,7 +4,27 @@ from cartapp.models import Cart
 # Create your views here.
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
+import random
 
+
+def get_cart(user):
+    if user.is_authenticated:
+        return Cart.objects.filter(user=user)
+    else:
+        return []
+
+
+def get_hot_product():
+    products = Product.objects.all()
+
+    return random.sample(list(products), 1)[0]
+
+
+def get_same_products(hot_product):
+    same_products = Product.objects.filter(category=hot_product.category). \
+                        exclude(pk=hot_product.pk)[:3]
+
+    return same_products
 
 def main(request):
     socials = ['socail' + str(i) for i in range(4)]
@@ -22,6 +42,9 @@ def products(request, pk=None):
 
     title = 'продукты'
     links_menu = ProductCategory.objects.all()
+
+    hot_product = get_hot_product()
+    same_products = get_same_products(hot_product)
 
     total = 0
     total_items = 0
@@ -54,7 +77,8 @@ def products(request, pk=None):
         'title': title,
         'links_menu': links_menu,
         'same_products': same_products,
-        'socials': socials
+        'hot_product': hot_product,
+        'socials': socials,
     }
 
     return render(request, 'mainapp/products.html', content)
@@ -66,3 +90,16 @@ def contact(request):
         'socials': socials
     }
     return render(request, 'mainapp/contact.html', context=content)
+
+
+def product(request, pk):
+    title = 'продукты'
+
+    content = {
+        'title': title,
+        'links_menu': ProductCategory.objects.all(),
+        'product': get_object_or_404(Product, pk=pk),
+        'cart': get_cart(request.user),
+    }
+
+    return render(request, 'mainapp/product.html', content)

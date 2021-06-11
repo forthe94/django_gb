@@ -10,4 +10,9 @@
         <input class="form-control" type="submit" value="войти">
     </form>
 
+    {% csrf_token %}
+    {% if next %}
+        <input type="hidden" name="next" value="{{ next }}">
+    {% endif %}
+    {{ login_form.as_p }}
 {% endblock %}
